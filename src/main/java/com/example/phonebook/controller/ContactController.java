@@ -2,6 +2,7 @@ package com.example.phonebook.controller;
 
 import com.example.phonebook.domain.Contact;
 import com.example.phonebook.repository.ContactRepository;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,17 +18,13 @@ public class ContactController {
     }
 
     @PostMapping
-    public Contact createContact(@RequestBody Contact contact) {
-        this.repository.save(contact);
-
-        return contact;
+    public Contact createContact(@Valid  @RequestBody Contact contact) {
+        return this.repository.save(contact);
     }
 
     @PutMapping("/{id}")
-    public Contact updateContact(@PathVariable("id") Long id, @RequestBody Contact contact) {
-        this.repository.save(contact);
-
-        return contact;
+    public Contact updateContact(@PathVariable("id") Long id, @Valid @RequestBody Contact contact) {
+        return this.repository.save(contact);
     }
 
     @GetMapping
