@@ -1,8 +1,10 @@
 package com.example.phonebook.controller;
 
 import com.example.phonebook.domain.Contact;
+import com.example.phonebook.exception.ContatoNaoEncontradoException;
 import com.example.phonebook.repository.ContactRepository;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,12 +35,19 @@ public class ContactController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Contact> getContactByPhone(@PathVariable("id") Long id) {
-        return this.repository.findById(id);
+    public Contact getContactByPhone(@PathVariable("id") Long id) {
+        return this.repository.findById(id)
+                .orElseThrow(() -> new ContatoNaoEncontradoException("Contato não encontrado com o ID " + id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteContactByPhone(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteContactByPhone(@PathVariable("id") Long id) {
+        if(!repository.existsById(id)) {
+            throw new ContatoNaoEncontradoException("Contato não encontrado com o ID " + id);
+        }
+
         this.repository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
