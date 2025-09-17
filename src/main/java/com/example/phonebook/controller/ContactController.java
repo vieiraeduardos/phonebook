@@ -4,11 +4,10 @@ import com.example.phonebook.domain.Contact;
 import com.example.phonebook.exception.ContatoNaoEncontradoException;
 import com.example.phonebook.repository.ContactRepository;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/contacts")
@@ -30,8 +29,9 @@ public class ContactController {
     }
 
     @GetMapping
-    public List<Contact> getAllContacts() {
-        return this.repository.findAll();
+    public ResponseEntity<Page<Contact>> getAllContacts(Pageable pageable) {
+        Page<Contact> contactsPage = repository.findAll(pageable);
+        return ResponseEntity.ok(contactsPage);
     }
 
     @GetMapping("/{id}")
