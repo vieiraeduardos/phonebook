@@ -1,6 +1,7 @@
 package com.example.phonebook.controller;
 
 import com.example.phonebook.domain.AuthenticationRequest;
+import com.example.phonebook.domain.Token;
 import com.example.phonebook.util.JWTUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,13 +25,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/api/auth/login")
-    public String createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
+    public Token createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
         );
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
-        return jwt;
+        Token token = new Token();
+        token.setAccess_token(jwt);
+        return token;
     }
 }
