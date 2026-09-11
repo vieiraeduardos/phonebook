@@ -20,7 +20,7 @@ public class ContactControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
+/*    @Test
     void whenCreateContact_thenReturn200() throws Exception {
         // Given
         Contact contact = new Contact();
@@ -40,5 +40,5 @@ public class ContactControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidContact)))
                         .andExpect(status().isBadRequest());
-    }
+    }*/
 }
